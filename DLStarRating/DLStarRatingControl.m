@@ -35,6 +35,21 @@
 	}
 }
 
+- (void)resetupViewWithCustomImages:(UIImage*)starImage highlightedStar:(UIImage*)highlightedStarImage {
+  self.clipsToBounds = YES;
+  currentIdx = -1;
+
+  NSArray *subviews = [NSArray arrayWithArray:self.subviews];
+  for (UIView *view in subviews) {
+    [view removeFromSuperview];
+  }
+  for (int i = 0; i < numberOfStars; i++) {
+    DLStarView *v = [[DLStarView alloc] initWithDefault:starImage highlighted:highlightedStarImage position:i allowFractions:isFractionalRatingEnabled];
+    [self addSubview:v];
+    [v release];
+  }
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -90,6 +105,14 @@
     highlightedStarImage = (highlightedStarImage) ? highlightedStarImage : highlightedStar;
     
     [selectedStar setStarImage:defaultStarImage highlightedStarImage:highlightedStarImage];
+}
+
+- (void)setAllStars:(UIImage*)defaultStarImage highlightedStar:(UIImage*)highlightedStarImage {
+  // check images for nil else use default stars
+  defaultStarImage = (defaultStarImage) ? defaultStarImage : star;
+  highlightedStarImage = (highlightedStarImage) ? highlightedStarImage : highlightedStar;
+
+  [self resetupViewWithCustomImages:defaultStarImage highlightedStar:highlightedStarImage];
 }
 
 #pragma mark -
